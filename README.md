@@ -3,8 +3,12 @@ Preview mrc volume in a simple viewer!
 
 ![](https://github.com/dzyla/MRCVolume_viewer/blob/master/7OwD44WAc61.gif)
 
-## Requirements
-Python 3+ / numpy / vtkplotter / mrcfile / easygui (optional)
+## Prerequisite
+```
+conda create -n mrcviewer python=3.12
+conda activate mrcviewer
+conda install -c conda-forge numpy vedo mrcfile easygui
+```
 
 ## How to
 run the script via command line or double click the file (windows). 
