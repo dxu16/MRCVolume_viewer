@@ -1,5 +1,5 @@
 import numpy as np
-from vtkplotter import *
+from vedo import *
 import mrcfile
 import argparse
 
@@ -29,7 +29,7 @@ def slider(widget, event):
     vol.threshold(value)
     '''
 
-    iso.updateMesh(vol.isosurface(threshold=value).polydata())
+    iso.update_dataset(vol.isosurface(value=value).dataset)
     print('Volume threshold: {}'.format(round(value, 4)))
 
 
@@ -52,15 +52,16 @@ if file_path == None:
 data0 = np.array(open_mrcs_file(file_path))
 print('Volume shape is: {}'.format(data0.shape))
 print('Press h for help and windows commands!')
+ini_threshold = (2 * np.min(data0) + np.max(data0)) / 3.0
 
 # change numpy object to vlt volume and set the threshold
-vol = Volume(data0, mode=0)
-iso = vol.isosurface(threshold=True).color('gray')
+vol = Volume(data0).mode(0)
+iso = vol.isosurface(value=ini_threshold).color('gray')
 
 # Add actors to the Plotter
 vp2 = Plotter(shape=[1, 1], size=(800, 800), bg='white')
 # Volume threshold in % because the raw values does not look "nice" on the slider
-vp2.addSlider2D(slider, xmin=0, xmax=100, title="volume threshold, %", showValue=True)
-vp2.addSlider2D(slider_color, xmin=1, xmax=100, title="color", showValue=True, pos=2)
+vp2.add_slider(slider, xmin=0, xmax=100, title="volume threshold, %", show_value=True, value=ini_threshold* 100/(np.max(data0) - np.min(data0)))
+vp2.add_slider(slider_color, xmin=1, xmax=100, title="color", show_value=True, pos=2)
 vp2.show(iso)
 vp2.show(interactive=True)
